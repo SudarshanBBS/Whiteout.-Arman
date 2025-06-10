@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>whiteovt - T-Shirts Business</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    :root {
+      --color-bg: #ffffff;
+      --color-text: #6b7280;
+      --color-accent: #6366f1; /* indigo-500 */
+      --color-accent-light: #e0e7ff; /* indigo-100 */
+      --border-radius: 0.75rem;
+      --shadow-light: rgba(0,0,0,0.05);
+      --shadow-card: rgba(99,102,241,0.15);
+      --font-family: 'Poppins', sans-serif;
+      --transition-duration: 0.35s;
+      --transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset and base styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-family);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a {
+      color: var(--color-text);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color var(--transition-duration) var(--transition-ease);
+      position: relative;
+      outline-offset: 2px;
+    }
+    a::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      bottom: 0;
+      left: 0;
+      background: var(--color-accent);
+      border-radius: 3px 3px 0 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform var(--transition-duration) var(--transition-ease);
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    a:hover,
+    a:focus {
+      color: var(--color-accent);
+    }
+    a:hover::before,
+    a:focus::before {
+      transform: scaleX(1);
+    }
+    strong {
+      color: var(--color-accent);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+      flex-grow: 1;
+    }
+
+    /* Header/navigation */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--color-bg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 1px 6px var(--shadow-light);
+      z-index: 999;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 1.75rem;
+      color: var(--color-text);
+      user-select: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color var(--transition-duration) var(--transition-ease);
+    }
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+    nav a {
+      font-weight: 600;
+      font-size: 1rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 3px solid transparent;
+      transition:
+        border-color var(--transition-duration) var(--transition-ease),
+        color var(--transition-duration) var(--transition-ease);
+      position: relative;
+    }
+    nav a.active {
+      color: var(--color-accent);
+    }
+    nav a.active::before {
+      transform: scaleX(1);
+    }
+    nav a:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    /* Section styling for pages */
+    section.page {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      padding-top: 3.5rem;
+    }
+    section.page.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Welcome page */
+    #welcome h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--color-accent);
+      letter-spacing: 0.07em;
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.2s;
+    }
+    #welcome p {
+      font-weight: 500;
+      font-size: 1.5rem;
+      max-width: 700px;
+      margin-bottom: 2.5rem;
+      line-height: 1.4;
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.4s;
+    }
+    #welcome .cta-btn {
+      background-color: var(--color-accent);
+      color: white;
+      font-weight: 700;
+      font-size: 1.125rem;
+      padding: 0.85rem 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 24px var(--shadow-card);
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition:
+        background-color var(--transition-duration) var(--transition-ease),
+        transform 0.3s ease;
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.6s;
+    }
+    #welcome .cta-btn:hover,
+    #welcome .cta-btn:focus {
+      background-color: #4f46e5;
+      outline: none;
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px var(--shadow-card);
+    }
+
+    /* Products page */
+    #products h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      color: var(--color-accent);
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.1s;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 2rem;
+    }
+    .product-card {
+      background: var(--color-accent-light);
+      border-radius: var(--border-radius);
+      padding: 1.5rem 1.75rem;
+      box-shadow: 0 6px 20px var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      animation-fill-mode: forwards;
+      transition:
+        transform 0.3s var(--transition-ease),
+        box-shadow 0.3s var(--transition-ease);
+    }
+    .product-card:hover,
+    .product-card:focus-within {
+      transform: scale(1.04) translateY(0);
+      box-shadow: 0 16px 36px var(--shadow-card);
+      outline: none;
+    }
+    .product-image {
+      width: 100%;
+      max-width: 230px;
+      border-radius: var(--border-radius);
+      margin-bottom: 1.25rem;
+      user-select: none;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.07);
+      transition: box-shadow 0.3s ease;
+    }
+    .product-image:hover {
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    }
+    .product-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.3rem;
+      color: var(--color-accent);
+      transition: color 0.3s ease;
+    }
+    .designer-name {
+      font-style: italic;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      color: #4b5563; /* gray-600 */
+      transition: color 0.3s ease;
+    }
+    .product-desc {
+      font-size: 1rem;
+      color: #374151; /* gray-700 */
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .product-price {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--color-accent);
+    }
+
+    /* About page */
+    #about h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: var(--color-accent);
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.1s;
+    }
+    #about p {
+      font-size: 1.1rem;
+      max-width: 750px;
+      color: var(--color-text);
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeSlideIn 0.9s forwards 0.25s;
+    }
+
+    /* Contact page */
+    #contact h2 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--color-accent);
+      opacity: 0;
+      animation: fadeSlideIn 0.7s forwards 0.1s;
+    }
+    form {
+      max-width: 450px;
+      background: var(--color-accent-light);
+      padding: 1.5rem 1.75rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 20px var(--shadow-card);
+      opacity: 0;
+      animation: fadeSlideIn 0.9s forwards 0.3s;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--color-text);
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      border-radius: 0.5rem;
+      border: 1.5px solid #d1d5db; /* gray-300 */
+      background-color: white;
+      font-size: 1rem;
+      color: var(--color-text);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+      font-family: var(--font-family);
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 8px var(--color-accent);
+      outline: none;
+      background-color: #fafafa;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 110px;
+      font-family: var(--font-family);
+    }
+    button {
+      background: var(--color-accent);
+      color: white;
+      font-weight: 700;
+      border: none;
+      padding: 0.85rem 1.75rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition:
+        background-color 0.3s ease,
+        transform 0.3s ease;
+      font-size: 1.1rem;
+      user-select: none;
+      width: 100%;
+    }
+    button:hover,
+    button:focus {
+      background: #4f46e5;
+      transform: scale(1.05);
+      outline: none;
+      box-shadow: 0 10px 30px var(--shadow-card);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--color-accent-light);
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: var(--color-text);
+      user-select: none;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      nav {
+        gap: 1.25rem;
+      }
+      #welcome h1 {
+        font-size: 2.8rem;
+      }
+      #welcome p {
+        font-size: 1.2rem;
+      }
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" aria-label="Brand name whiteovt">whiteovt</div>
+    <nav role="navigation" aria-label="Primary navigation">
+      <a href="#" class="nav-link active" data-target="welcome" aria-current="page">Welcome</a>
+      <a href="#" class="nav-link" data-target="products">Products</a>
+      <a href="#" class="nav-link" data-target="about">About</a>
+      <a href="#" class="nav-link" data-target="contact">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container" id="main-content" tabindex="-1">
+    <section id="welcome" class="page active" role="region" aria-labelledby="welcome-title">
+      <h1 id="welcome-title">Welcome to our site.</h1>
+      <p>We care about you.</p>
+      <button class="cta-btn" id="shop-now-btn" type="button" aria-label="Shop Now">Shop Now</button>
+    </section>
+
+    <section id="products" class="page" role="region" aria-labelledby="products-title">
+      <h2 id="products-title">Our T-Shirts Collection</h2>
+      <div class="product-grid" aria-live="polite" id="product-grid">
+        <article class="product-card" tabindex="0" style="animation-delay: 0.1s;">
+          <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Purple graphic T-shirt" class="product-image" />
+          <h3 class="product-title">Purple Vibes Tee</h3>
+          <div class="designer-name">Designer: John Doe</div>
+          <p class="product-desc">Soft cotton T-shirt with a bold purple graphic design.</p>
+          <div class="product-price">$25.00</div>
+        </article>
+        <article class="product-card" tabindex="0" style="animation-delay: 0.25s;">
+          <img src="https://images.unsplash.com/photo-1520975695868-cdbfeff0dbf6?auto=format&fit=crop&w=400&q=80" alt="Casual black T-shirt" class="product-image" />
+          <h3 class="product-title">Midnight Black Tee</h3>
+          <div class="designer-name">Designer: Jane Smith</div>
+          <p class="product-desc">Classic black T-shirt with minimalist white print.</p>
+          <div class="product-price">$22.00</div>
+        </article>
+        <article class="product-card" tabindex="0" style="animation-delay: 0.4s;">
+          <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=400&q=80" alt="Purple ombré T-shirt" class="product-image" />
+          <h3 class="product-title">Ombré Purple Tee</h3>
+          <div class="designer-name">Designer: Alex Johnson</div>
+          <p class="product-desc">Gradient purple design, trendy and stylish wear.</p>
+          <div class="product-price">$28.00</div>
+        </article>
+        <article class="product-card" tabindex="0" style="animation-delay: 0.55s;">
+          <img src="https://images.unsplash.com/photo-1520975920881-1520f36dd7a8?auto=format&fit=crop&w=400&q=80" alt="Comfortable white T-shirt" class="product-image" />
+          <h3 class="product-title">Soft White Tee</h3>
+          <div class="designer-name">Designer: Maria Lee</div>
+          <p class="product-desc">Light and breathable cotton tee, everyday essential.</p>
+          <div class="product-price">$20.00</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="page" role="region" aria-labelledby="about-title">
+      <h2 id="about-title">About whiteovt</h2>
+      <p>
+        At whiteovt, we believe in quality over quantity. Our mission is to provide
+        T-shirts that not only look great but feel great. We care deeply about our customers and
+        their comfort, making sure every product we deliver meets the highest standard.
+        Join our community and wear your personality with pride.
+      </p>
+    </section>
+
+    <section id="contact" class="page" role="region" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact Us</h2>
+      <form id="contact-form" aria-label="Contact form">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" required />
+
+        <label for="email">Your Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer>
+    &copy; 2024 whiteovt. All rights reserved.
+  </footer>
+
+  <script>
+    (function() {
+      const navLinks = document.querySelectorAll('nav a.nav-link');
+      const pages = document.querySelectorAll('section.page');
+      const mainContent = document.getElementById('main-content');
+      const shopNowBtn = document.getElementById('shop-now-btn');
+      const productCards = document.querySelectorAll('.product-card');
+
+      function activatePage(targetId) {
+        pages.forEach(section => {
+          if(section.id === targetId) {
+            section.classList.add('active');
+            section.setAttribute('aria-hidden', 'false');
+            section.focus();
+          } else {
+            section.classList.remove('active');
+            section.setAttribute('aria-hidden', 'true');
+          }
+        });
+        navLinks.forEach(link => {
+          if(link.dataset.target === targetId) {
+            link.classList.add('active');
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.classList.remove('active');
+            link.removeAttribute('aria-current');
+          }
+        });
+
+        // Animate product cards on products page reveal
+        if(targetId === 'products') {
+          productCards.forEach((card, idx) => {
+            card.style.animation = `fadeSlideIn 0.5s ease forwards`;
+            card.style.animationDelay = `${0.1 + idx * 0.15}s`;
+          });
+        } else {
+          // Clear animation styles to hide product cards for other pages
+          productCards.forEach(card => {
+            card.style.animation = '';
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+          });
+        }
+      }
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const targetId = link.dataset.target;
+          activatePage(targetId);
+          history.pushState(null, '', `#${targetId}`);
+        });
+      });
+
+      shopNowBtn.addEventListener('click', () => {
+        activatePage('products');
+        history.pushState(null, '', '#products');
+      });
+
+      window.addEventListener('popstate', () => {
+        const hash = location.hash.replace('#','');
+        if(hash && [...pages].some(p => p.id === hash)) {
+          activatePage(hash);
+        } else {
+          activatePage('welcome');
+        }
+      });
+
+      const initialHash = location.hash.replace('#','');
+      if(initialHash && [...pages].some(p => p.id === initialHash)) {
+        activatePage(initialHash);
+      } else {
+        activatePage('welcome');
+      }
+
+      const form = document.getElementById('contact-form');
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Thank you for your message! We will get back to you soon.');
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
